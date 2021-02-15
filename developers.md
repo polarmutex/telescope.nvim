@@ -13,7 +13,7 @@ TODO: Talk about what actions vs actions sets are
 - `lua/telescope/actions/set.lua`
     - The second most "user-facing" of the files. This provides actions that are consumed by several builtin actions, which allows for only overriding ONE item, instead of copying the same configuration / function several times.
 - `lua/telescope/actions/state.lua`
-    - Provides APIs for interacting with the state of telescope while in actions. 
+    - Provides APIs for interacting with the state of telescope while in actions.
     - These are most useful for writing your own actions and interacting with telescope at that time
 - `lua/telescope/actions/mt.lua`
     - You probably don't need to look at this, but it defines the behavior of actions.
@@ -23,6 +23,7 @@ TODO: Talk about what actions vs actions sets are
 Directly override an action with a new function
 
 ```lua
+local actions = require('telescope.actions')
 actions.select_default:replace(git_checkout_function)
 ```
 
@@ -31,6 +32,7 @@ actions.select_default:replace(git_checkout_function)
 Override an action only when `conditional` returns true.
 
 ```lua
+local action_set = require('telescope.actions.set')
 action_set.edit:replace_if(
   function()
     return action_state.get_selected_entry().path:sub(-1) == os_sep
@@ -44,6 +46,7 @@ action_set.edit:replace_if(
 ### `:replace_map(configuration)`
 
 ```lua
+local action_set = require('telescope.actions.set')
 -- Use functions as keys to map to which function to execute when called.
 action_set.edit:replace_map {
   [function(e) return e > 0 end] = function(e) return (e / 10) end,

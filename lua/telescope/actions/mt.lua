@@ -92,6 +92,11 @@ action_mt.create = function(mod)
     assert(#self == 1, "Cannot replace an already combined action")
 
     local action_name = self[1]
+    -- TODO(conni2461): Remove deprecated messages
+    if action_name:find('goto_file_selection') then
+      error("`" .. action_name .. "` is deprecated and no longer replaceable. " ..
+        "Use `require('telescope.actions').select_` instead. Take a look at developers.md for more Information.")
+    end
 
     if not mt._replacements[action_name] then
       mt._replacements[action_name] = {}
@@ -105,6 +110,11 @@ action_mt.create = function(mod)
     assert(#self == 1, "Cannot enhance already combined actions")
 
     local action_name = self[1]
+    -- TODO(conni2461): Remove deprecated messages
+    if action_name:find('goto_file_selection') then
+      error("`" .. action_name .. "` is deprecated and no longer replaceable. " ..
+        "Use `require('telescope.actions').select_` instead. Take a look at developers.md for more Information.")
+    end
     if opts.pre then
       mt._pre[action_name] = opts.pre
     end

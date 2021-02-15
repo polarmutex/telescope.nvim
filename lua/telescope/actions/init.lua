@@ -13,14 +13,17 @@ local transform_mod = require('telescope.actions.mt').transform_mod
 
 local actions = setmetatable({}, {
   __index = function(_, k)
+    -- TODO(conni2461): Remove deprecated messages
     if k == '_goto_file_selection' then
-      error("_goto_file_selection is now deprecated. Instead use `action_set.edit`")
+      error("`_goto_file_selection` is deprecated and no longer replaceable. " ..
+        "Use `require('telescope.actions.set').edit` instead. Take a look at developers.md for more Information.")
     end
 
     error("Key does not exist for 'telescope.actions': " .. tostring(k))
   end
 })
 
+-- TODO(conni2461): Remove deprecated messages
 local action_is_deprecated = function(name, err)
   local messager = err and error or log.info
 
@@ -111,20 +114,36 @@ end
 -- TODO: consider adding float!
 -- https://github.com/nvim-telescope/telescope.nvim/issues/365
 
+
+-- TODO(conni2461): Remove deprecated messages and functions
+local goto_is_deprecated = function(name, new)
+  return vim.api.nvim_err_writeln(string.format(
+    "Telescope config: `actions.%s()` is deprecated. Use `actions.%s()` instead.", name, new
+  ))
+end
+
 function actions.goto_file_selection_edit(prompt_bufnr)
-  return action_set.edit(prompt_bufnr, "edit")
+  local ret = action_set.edit(prompt_bufnr, "edit")
+  goto_is_deprecated('goto_file_selection_edit', 'select_default')
+  return ret
 end
 
 function actions.goto_file_selection_split(prompt_bufnr)
-  return action_set.edit(prompt_bufnr, "new")
+  local ret = action_set.edit(prompt_bufnr, "new")
+  goto_is_deprecated('goto_file_selection_split', 'select_horizontal')
+  return ret
 end
 
 function actions.goto_file_selection_vsplit(prompt_bufnr)
-  return action_set.edit(prompt_bufnr, "vnew")
+  local ret = action_set.edit(prompt_bufnr, "vnew")
+  goto_is_deprecated('goto_file_selection_vsplit', 'select_vertical')
+  return ret
 end
 
 function actions.goto_file_selection_tabedit(prompt_bufnr)
-  return action_set.edit(prompt_bufnr, "tabedit")
+  local ret = action_set.edit(prompt_bufnr, "tabedit")
+  goto_is_deprecated('goto_file_selection_tabedit', 'select_tab')
+  return ret
 end
 
 function actions.close_pum(_)
